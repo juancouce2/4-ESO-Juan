@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ficha de Dirección de Sesión - Baloncesto (Proyecto)</title>
+
+  <style>
+    :root{
+      --b:#111; --g:#666; --bg:#f6f6f7; --card:#fff; --line:#e6e6ea;
+      --accent:#2563eb;
+      --accent2:#22c55e;
+      --accentSoft: rgba(37,99,235,.12);
+      --accentSoft2: rgba(34,197,94,.12);
+      --glow: 0 0 0 4px var(--accentSoft);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--b);
+      line-height:1.35;
+    }
+
+    header{
+      padding:18px 16px;
+      background: var(--card);
+      border-bottom: 1px solid var(--line);
+      position: sticky; top:0; z-index:10;
+    }
+    header h1{ margin:0; font-size:18px; }
+    header p{ margin:6px 0 0; color:var(--g); font-size:13px; }
+
+    main{ max-width:980px; margin:18px auto; padding:0 16px 32px; }
+    .row{ display:grid; gap:12px; grid-template-columns:1fr; }
+    @media (min-width: 860px){ .row.two{ grid-template-columns:1fr 1fr; } }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      box-shadow: 0 1px 0 rgba(0,0,0,.03);
+      position: relative;
+      overflow: hidden;
+
+      border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
+      box-shadow:
+        0 1px 0 rgba(0,0,0,.03),
+        0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-60px -80px auto auto;
+      width: 220px;
+      height: 220px;
+      background:
+        radial-gradient(circle at 30% 30%, var(--accentSoft), transparent 60%),
+        radial-gradient(circle at 60% 60%, var(--accentSoft2), transparent 60%);
+      filter: blur(2px);
+      pointer-events:none;
+      opacity: .95;
+      transform: rotate(10deg);
+    }
+
+    .card.hero{
+      box-shadow:
+        0 1px 0 rgba(0,0,0,.03),
+        var(--glow),
+        0 0 0 1px color-mix(in srgb, var(--accent) 35%, var(--line));
+    }
+
+    h2{ margin:0 0 10px; font-size:16px; position:relative; }
+    h2 .tag{
+      display:inline-block;
+      margin-left:8px;
+      font-size:12px;
+      padding:2px 8px;
+      border-radius:999px;
+      background: var(--accentSoft);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+      vertical-align: middle;
+    }
+
+    label{ display:block; font-size:13px; color:var(--g); margin:10px 0 6px; }
+    input[type="text"], textarea, select{
+      width:100%;
+      padding:10px 10px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-size:14px;
+      outline:none;
+    }
+    textarea{ min-height:90px; resize:vertical; }
+    .help{ font-size:12px; color:var(--g); margin-top:6px; }
+
+    .inline{ display:flex; gap:10px; flex-wrap:wrap; }
+    .inline > div{ flex:1 1 190px; }
+    .divider{ height:1px; background:var(--line); margin:12px 0; }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      position:relative;
+    }
+    th, td{
+      padding:10px;
+      border-bottom:1px solid var(--line);
+      vertical-align: top;
+      font-size:13px;
+    }
+    th{ text-align:left; background:#fafafb; color:#333; }
+    tr:last-child td{ border-bottom:0; }
+
+    .pill{
+      display:inline-block;
+      padding:3px 8px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:12px;
+      color:#333;
+      background:#fafafb;
+      margin-left:6px;
+    }
+
+    fieldset{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      margin:12px 0 0;
+      background:#fff;
+      position:relative;
+    }
+    legend{
+      padding:0 8px;
+      font-weight:700;
+      font-size:13px;
+      color: var(--accent);
+    }
+
+    .grid-3{
+      display:grid;
+      gap:10px;
+      grid-template-columns:1fr;
+    }
+    @media (min-width: 860px){ .grid-3{ grid-template-columns:1fr 1fr 1fr; } }
+
+    .btns{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    button{
+      border: 1px solid var(--line);
+      background:#fff;
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:14px;
+    }
+    button.primary{
+      background: var(--accent);
+      color:#fff;
+      border-color: var(--accent);
+    }
+    button.secondary{
+      background: var(--accent2);
+      color:#fff;
+      border-color: var(--accent2);
+    }
+    .note{ font-size:12px; color:var(--g); margin-top:10px; }
+
+    input[type="color"]{
+      width: 100%;
+      height: 42px;
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background:#fff;
+    }
+
+    .team-preview{
+      border-radius: 16px;
+      border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+      background:
+        linear-gradient(135deg, var(--accentSoft) 0%, rgba(255,255,255,.9) 55%),
+        linear-gradient(135deg, var(--accent2) 0%, rgba(255,255,255,0) 45%);
+      padding: 12px;
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      margin-top: 10px;
+      position: relative;
+      overflow:hidden;
+    }
+    .team-preview::after{
+      content:"";
+      position:absolute;
+      inset:auto -40px -40px auto;
+      width:160px; height:160px;
+      background: radial-gradient(circle, var(--accentSoft2), transparent 60%);
+      filter: blur(1px);
+      transform: rotate(-10deg);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .badge{
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 6px 18px rgba(0,0,0,.10);
+      flex: 0 0 auto;
+      position:relative;
+      z-index:1;
+    }
+    .team-preview h3{ margin:0; font-size:14px; position:relative; z-index:1; }
+    .team-preview p{ margin:3px 0 0; color: var(--g); font-size: 12px; position:relative; z-index:1; }
+
+    /* Fotos */
+    .photos-top{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    input[type="file"]{
+      width: 100%;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px dashed var(--line);
+      background:#fff;
+      font-size:14px;
+    }
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap:10px;
+      margin-top:10px;
+    }
+    .photo{
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow:hidden;
+      background:#fff;
+      display:flex;
+      flex-direction:column;
+    }
+    .photo img{
+      width:100%;
+      height:120px;
+      object-fit:cover;
+      display:block;
+    }
+    .photo .cap{
+      padding:8px;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .photo .cap input{
+      padding:8px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      font-size:12px;
+    }
+    .photo .cap button{
+      padding:8px 10px;
+      border-radius:10px;
+      font-size:12px;
+    }
+
+    .no-print{}
+    @media print{
+      header, .btns, .note, .no-print { display:none !important; }
+      body{ background:#fff; }
+      .card{ box-shadow:none; }
+      main{ margin:0; max-width:none; padding:0; }
+      .card::before{ display:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Ficha de Dirección de Sesión <span class="pill">Rellenable</span></h1>
+    <p>RECUERDA: tenéis <strong>50’ reales</strong>. Ajustad tiempos y explicaciones.</p>
+  </header>
+
+  <main>
+    <form id="ficha">
+
+      <div class="row two">
+        <section class="card hero">
+          <h2>1) Identidad de equipo <span class="tag">+ colores</span></h2>
+
+          <label for="equipo">Nombre del equipo</label>
+          <input id="equipo" name="equipo" type="text" placeholder="Ej.: Los TripleThreat" />
+
+          <div class="inline">
+            <div>
+              <label for="clase">Clase</label>
+              <input id="clase" name="clase" type="text" placeholder="4º ESO __" />
+            </div>
+
+            <!-- ✅ CAMBIO: contenido asignado ahora es desplegable -->
+            <div>
+              <label for="contenido">Contenido asignado</label>
+              <select id="contenido" name="contenido">
+                <option value="" selected>— Selecciona —</option>
+                <option>Sesión 1: Pase, bote y recepción</option>
+                <option>Sesión 2: Lanzamiento y entrada a canasta</option>
+                <option>Sesión 3: Finta y regate</option>
+                <option>Sesión 4: Táctica</option>
+              </select>
+            </div>
+          </div>
+
+          <label>Integrantes del grupo</label>
+          <div class="grid-3">
+            <input name="integrante1" type="text" placeholder="Integrante 1" />
+            <input name="integrante2" type="text" placeholder="Integrante 2" />
+            <input name="integrante3" type="text" placeholder="Integrante 3" />
+            <input name="integrante4" type="text" placeholder="Integrante 4" />
+            <input name="integrante5" type="text" placeholder="Integrante 5" />
+            <input name="integrante6" type="text" placeholder="Integrante 6" />
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="row two">
+            <div>
+              <label for="color1">Color principal del equipo</label>
+              <input id="color1" name="color1" type="color" value="#2563eb" />
+            </div>
+            <div>
+              <label for="color2">Color secundario del equipo</label>
+              <input id="color2" name="color2" type="color" value="#22c55e" />
+            </div>
+          </div>
+
+          <p class="help">Elegid 2 colores. La ficha se personaliza automáticamente.</p>
+
+          <div class="team-preview" aria-live="polite">
+            <div class="badge" aria-hidden="true"></div>
+            <div>
+              <h3 id="teamPreviewTitle">Equipo: —</h3>
+              <p id="teamPreviewSub">Identidad lista. Ahora toca jugar con sentido.</p>
+            </div>
+          </div>
+
+          <label for="objetivoDia">Objetivo del día (1 frase)</label>
+          <input id="objetivoDia" name="objetivoDia" type="text" />
+
+          <label for="presentacionGuion">Guion breve de presentación (qué decís en 30-40s)</label>
+          <textarea id="presentacionGuion" name="presentacionGuion"></textarea>
+        </section>
+
+        <section class="card">
+          <h2>2) Organización temporal (50’)</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Parte de la sesión</th>
+                <th>Tiempo</th>
+                <th>Quién dirige</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Presentación del equipo</td>
+                <td>5’</td>
+                <td><input name="resp_presentacion" type="text" placeholder="Nombre(s)" /></td>
+              </tr>
+              <tr>
+                <td>Calentamiento</td>
+                <td>5–8’</td>
+                <td><input name="resp_calentamiento" type="text" placeholder="Nombre(s)" /></td>
+              </tr>
+              <tr>
+                <td>Actividad 1</td>
+                <td>7–10’</td>
+                <td><input name="resp_act1" type="text" placeholder="Nombre(s)" /></td>
+              </tr>
+              <tr>
+                <td>Actividad 2</td>
+                <td>7–10’</td>
+                <td><input name="resp_act2" type="text" placeholder="Nombre(s)" /></td>
+              </tr>
+              <tr>
+                <td>Actividad 3</td>
+                <td>7–10’</td>
+                <td><input name="resp_act3" type="text" placeholder="Nombre(s)" /></td>
+              </tr>
+              <tr>
+                <td><strong>Actividad 4</strong> (Situación real de juego)</td>
+                <td>7–10’</td>
+                <td><input name="resp_act4" type="text" placeholder="Nombre(s)" /></td>
+              </tr>
+              <tr>
+                <td>Vuelta a la calma + microexplicación</td>
+                <td>5–8’</td>
+                <td><input name="resp_vuelta" type="text" placeholder="Nombre(s)" /></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="help">Consejo: si os pasáis explicando, el juego se muere. Si vais con prisa, el grupo se pierde.</p>
+        </section>
+      </div>
+
+      <section class="card">
+        <h2>Adjuntos (fotos del equipo / material creado) <span class="tag">galería</span></h2>
+        <p class="help no-print">
+          Podéis subir 2–6 fotos. Se guardan en este dispositivo/navegador. Si subís fotos muy pesadas, puede fallar por límite.
+        </p>
+
+        <div class="photos-top no-print">
+          <div style="flex:1 1 320px;">
+            <label for="photoInput">Subir foto(s)</label>
+            <input id="photoInput" type="file" accept="image/*" multiple />
+          </div>
+          <div style="display:flex; gap:10px; align-items:end;">
+            <button type="button" class="secondary" id="clearPhotosBtn">Borrar fotos</button>
+          </div>
+        </div>
+
+        <div id="gallery" class="gallery"></div>
+      </section>
+
+      <section class="card">
+        <h2>3) Desarrollo de la sesión</h2>
+
+        <fieldset>
+          <legend>Calentamiento (5–8’)</legend>
+          <label>Nombre de la tarea</label><input name="cal_nombre" type="text" />
+          <label>Objetivo</label><input name="cal_objetivo" type="text" />
+          <label>Organización y espacio</label><textarea name="cal_org"></textarea>
+          <label>Material</label><input name="cal_material" type="text" />
+          <label>Consignas clave (2–3)</label><textarea name="cal_consignas"></textarea>
+          <label>Variante o progresión</label><textarea name="cal_variante"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Actividad 1 (7–10’)</legend>
+          <label>Nombre</label><input name="a1_nombre" type="text" />
+          <label>Objetivo</label><input name="a1_objetivo" type="text" />
+          <label>Organización y espacio</label><textarea name="a1_org"></textarea>
+          <label>Material</label><input name="a1_material" type="text" />
+          <label>Consignas clave (2–3)</label><textarea name="a1_consignas"></textarea>
+          <label>Variante o adaptación</label><textarea name="a1_variante"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Actividad 2 (7–10’)</legend>
+          <label>Nombre</label><input name="a2_nombre" type="text" />
+          <label>Objetivo</label><input name="a2_objetivo" type="text" />
+          <label>Organización y espacio</label><textarea name="a2_org"></textarea>
+          <label>Material</label><input name="a2_material" type="text" />
+          <label>Consignas clave (2–3)</label><textarea name="a2_consignas"></textarea>
+          <label>Variante o adaptación</label><textarea name="a2_variante"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Actividad 3 (7–10’)</legend>
+          <label>Nombre</label><input name="a3_nombre" type="text" />
+          <label>Objetivo</label><input name="a3_objetivo" type="text" />
+          <label>Organización y espacio</label><textarea name="a3_org"></textarea>
+          <label>Material</label><input name="a3_material" type="text" />
+          <label>Consignas clave (2–3)</label><textarea name="a3_consignas"></textarea>
+          <label>Variante o adaptación</label><textarea name="a3_variante"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend><strong>Actividad 4</strong> (Situación real de juego) (7–10’)</legend>
+          <label>Formato de juego (ej.: 3c3 / 4c4 / 2c2…)</label>
+          <input name="a4_formato" type="text" />
+          <label>Regla condicionada / reto</label><textarea name="a4_regla"></textarea>
+          <label>Objetivo táctico</label><input name="a4_objetivo" type="text" />
+          <label>Cómo garantizáis participación (equidad)</label><textarea name="a4_equidad"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Vuelta a la calma + microexplicación (5–8’)</legend>
+          <label>Tema asignado</label>
+          <select name="v_tema">
+            <option value="" selected>— Elige un tema —</option>
+            <option>El 3x3 en las redes sociales</option>
+            <option>3x3 en Juegos Olímpicos</option>
+            <option>Dónde jugar 3x3 en nuestro entorno</option>
+            <option>Circuitos oficiales en Andalucía</option>
+          </select>
+          <label>Vuelta a la calma (qué hacéis y cómo)</label><textarea name="v_vuelta"></textarea>
+          <label>Microexplicación (2–3 ideas clave)</label><textarea name="v_micro"></textarea>
+        </fieldset>
+      </section>
+
+      <!-- ✅ CAMBIO: subtítulo en autoevaluación -->
+      <section class="card">
+        <h2>4) Autoevaluación rápida del equipo <span class="tag">Completar después de dirigir la sesión</span></h2>
+
+        <label>¿Qué ha salido bien?</label><textarea name="auto_bien"></textarea>
+        <label>¿Qué mejoraríamos para la próxima?</label><textarea name="auto_mejorar"></textarea>
+        <label>¿Nos hemos ajustado al tiempo (50’)? ¿Dónde nos hemos pasado?</label><textarea name="auto_tiempo"></textarea>
+        <label>Incidencias / seguridad (si hay)</label><textarea name="auto_seguridad"></textarea>
+      </section>
+
+      <section class="card">
+        <div class="btns">
+          <button type="button" class="primary" id="saveBtn">Guardar</button>
+          <button type="button" id="loadBtn">Cargar</button>
+          <button type="button" id="clearBtn">Borrar</button>
+          <button type="button" id="printBtn">Imprimir / PDF</button>
+          <button type="button" id="exportBtn">Exportar .txt</button>
+        </div>
+        <p class="note">Guardado local: se guarda en este navegador/dispositivo (no en la nube).</p>
+      </section>
+
+    </form>
+  </main>
+
+  <script>
+    const KEY = "ficha_sesion_baloncesto_v5";
+    const PHOTO_KEY = "ficha_sesion_photos_v5";
+
+    function hexToRgba(hex, a){
+      const h = hex.replace("#","");
+      const r = parseInt(h.substring(0,2),16);
+      const g = parseInt(h.substring(2,4),16);
+      const b = parseInt(h.substring(4,6),16);
+      return `rgba(${r},${g},${b},${a})`;
+    }
+
+    function setThemeFromColors(c1, c2){
+      document.documentElement.style.setProperty("--accent", c1);
+      document.documentElement.style.setProperty("--accent2", c2);
+      document.documentElement.style.setProperty("--accentSoft", hexToRgba(c1, 0.12));
+      document.documentElement.style.setProperty("--accentSoft2", hexToRgba(c2, 0.12));
+    }
+
+    function getFormData(form){
+      const data = {};
+      const els = form.querySelectorAll("input, textarea, select");
+      els.forEach(el => {
+        if (!el.name) return;
+        data[el.name] = el.value;
+      });
+      return data;
+    }
+
+    function setFormData(form, data){
+      const els = form.querySelectorAll("input, textarea, select");
+      els.forEach(el => {
+        if (!el.name) return;
+        if (Object.prototype.hasOwnProperty.call(data, el.name)) el.value = data[el.name];
+      });
+    }
+
+    function exportTxt(data, photos){
+      const lines = [];
+      const nice = (k) => k.replaceAll("_"," ").toUpperCase();
+      lines.push("FICHA DE DIRECCIÓN DE SESIÓN - PROYECTO");
+      lines.push("=".repeat(45));
+      Object.entries(data).forEach(([k,v]) => {
+        if (String(v).trim() === "") return;
+        lines.push(`\n${nice(k)}\n${v}`);
+      });
+      if (photos?.length){
+        lines.push("\n\nADJUNTOS (FOTOS)");
+        photos.forEach((p,i)=>{
+          const cap = (p.caption||"").trim();
+          lines.push(`- Foto ${i+1}${cap ? ": "+cap : ""}`);
+        });
+      }
+      return lines.join("\n");
+    }
+
+    // Fotos
+    let photos = [];
+    const gallery = document.getElementById("gallery");
+    const photoInput = document.getElementById("photoInput");
+    const clearPhotosBtn = document.getElementById("clearPhotosBtn");
+
+    function renderGallery(){
+      gallery.innerHTML = "";
+      if (!photos.length){
+        gallery.innerHTML = `<p class="help">No hay fotos añadidas.</p>`;
+        return;
+      }
+      photos.forEach((p, idx) => {
+        const wrap = document.createElement("div");
+        wrap.className = "photo";
+
+        const img = document.createElement("img");
+        img.src = p.dataUrl;
+
+        const cap = document.createElement("div");
+        cap.className = "cap";
+
+        const capInput = document.createElement("input");
+        capInput.type = "text";
+        capInput.placeholder = "Pie de foto (opcional)";
+        capInput.value = p.caption || "";
+        capInput.addEventListener("input", () => {
+          photos[idx].caption = capInput.value;
+          persistPhotos();
+        });
+
+        const del = document.createElement("button");
+        del.type = "button";
+        del.textContent = "Quitar";
+        del.addEventListener("click", () => {
+          photos.splice(idx, 1);
+          persistPhotos();
+          renderGallery();
+        });
+
+        cap.appendChild(capInput);
+        cap.appendChild(del);
+
+        wrap.appendChild(img);
+        wrap.appendChild(cap);
+        gallery.appendChild(wrap);
+      });
+    }
+
+    function persistPhotos(){
+      try{
+        localStorage.setItem(PHOTO_KEY, JSON.stringify(photos));
+      }catch(e){
+        alert("No se han podido guardar las fotos (límite de almacenamiento). Sube menos fotos o más pequeñas.");
+      }
+    }
+
+    function loadPhotos(){
+      const raw = localStorage.getItem(PHOTO_KEY);
+      if (!raw) return [];
+      try{ return JSON.parse(raw) || []; }catch{ return []; }
+    }
+
+    async function fileToDataUrl(file, maxWidth=1400, quality=0.85){
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      await new Promise((res, rej)=>{ img.onload=res; img.onerror=rej; img.src=url; });
+      const ratio = img.width > maxWidth ? (maxWidth / img.width) : 1;
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * ratio);
+      canvas.height = Math.round(img.height * ratio);
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      return canvas.toDataURL("image/jpeg", quality);
+    }
+
+    photoInput?.addEventListener("change", async (e)=>{
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      const MAX = 8;
+      if (photos.length + files.length > MAX){
+        alert(`Máximo ${MAX} fotos. Quita alguna antes de añadir más.`);
+        photoInput.value = "";
+        return;
+      }
+      for (const f of files){
+        if (!f.type.startsWith("image/")) continue;
+        const dataUrl = await fileToDataUrl(f);
+        photos.push({ dataUrl, caption:"" });
+      }
+      persistPhotos();
+      renderGallery();
+      photoInput.value = "";
+    });
+
+    clearPhotosBtn?.addEventListener("click", ()=>{
+      if (!confirm("¿Borrar todas las fotos?")) return;
+      photos = [];
+      localStorage.removeItem(PHOTO_KEY);
+      renderGallery();
+    });
+
+    // Preview + tema
+    const form = document.getElementById("ficha");
+    const teamName = document.getElementById("equipo");
+    const teamPreviewTitle = document.getElementById("teamPreviewTitle");
+    const color1 = document.getElementById("color1");
+    const color2 = document.getElementById("color2");
+
+    function updatePreview(){
+      const name = (teamName.value || "—").trim();
+      teamPreviewTitle.textContent = `Equipo: ${name || "—"}`;
+    }
+    teamName.addEventListener("input", updatePreview);
+
+    color1.addEventListener("input", ()=> setThemeFromColors(color1.value, color2.value));
+    color2.addEventListener("input", ()=> setThemeFromColors(color1.value, color2.value));
+
+    // Botones
+    const saveBtn = document.getElementById("saveBtn");
+    const loadBtn = document.getElementById("loadBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const printBtn = document.getElementById("printBtn");
+    const exportBtn = document.getElementById("exportBtn");
+
+    saveBtn.addEventListener("click", ()=>{
+      const data = getFormData(form);
+      localStorage.setItem(KEY, JSON.stringify(data));
+      persistPhotos();
+      alert("Guardado ✅");
+    });
+
+    loadBtn.addEventListener("click", ()=>{
+      const raw = localStorage.getItem(KEY);
+      if (!raw){ alert("No hay nada guardado todavía."); return; }
+      try{
+        const data = JSON.parse(raw);
+        setFormData(form, data);
+
+        const c1 = data.color1 || "#2563eb";
+        const c2 = data.color2 || "#22c55e";
+        setThemeFromColors(c1, c2);
+        updatePreview();
+
+        photos = loadPhotos();
+        renderGallery();
+        alert("Cargado ✅");
+      }catch(e){
+        alert("Error al cargar. Puede que el guardado esté corrupto.");
+      }
+    });
+
+    clearBtn.addEventListener("click", ()=>{
+      if (!confirm("¿Seguro que quieres borrar el formulario y el guardado local?")) return;
+      form.reset();
+      localStorage.removeItem(KEY);
+      photos = [];
+      localStorage.removeItem(PHOTO_KEY);
+      setThemeFromColors("#2563eb", "#22c55e");
+      updatePreview();
+      renderGallery();
+      alert("Borrado ✅");
+    });
+
+    printBtn.addEventListener("click", ()=> window.print());
+
+    exportBtn.addEventListener("click", ()=>{
+      const data = getFormData(form);
+      const txt = exportTxt(data, photos);
+      const blob = new Blob([txt], { type:"text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ficha_sesion.txt";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // Autosave
+    let t;
+    form.addEventListener("input", ()=>{
+      clearTimeout(t);
+      t = setTimeout(()=>{
+        const data = getFormData(form);
+        localStorage.setItem(KEY, JSON.stringify(data));
+      }, 500);
+    });
+
+    // Init
+    (function init(){
+      const raw = localStorage.getItem(KEY);
+      if (raw){
+        try{
+          const data = JSON.parse(raw);
+          setFormData(form, data);
+          const c1 = data.color1 || "#2563eb";
+          const c2 = data.color2 || "#22c55e";
+          setThemeFromColors(c1, c2);
+        }catch{
+          setThemeFromColors("#2563eb", "#22c55e");
+        }
+      }else{
+        setThemeFromColors("#2563eb", "#22c55e");
+      }
+      updatePreview();
+      photos = loadPhotos();
+      renderGallery();
+    })();
+  </script>
+</body>
+</html>
